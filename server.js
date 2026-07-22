@@ -1,11 +1,12 @@
-import http from "http";
+//import http from "http";
+import app from "./src/app.js"
 const PORT = 3000;
 
-const server = http.createServer((req, res) =>{
-    res.writeHead(200, {"Content-type" :"text/plain"});
-    res.end("Livraria");
-});
+const rota = {
+    "/": ""
+};
 
-server.listen(PORT, () => {
-    console.log("servidor ouvindo.")
+
+app.listen(PORT, () => {
+    console.log("servidor exprees.")
 });
