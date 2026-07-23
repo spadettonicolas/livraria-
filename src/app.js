@@ -1,5 +1,8 @@
 import express from "express";
 import conectaDatabase from "./config/dbConect.js";
+import livro from "./models/Livro.js";
+import routes from "./routes/livrosRoutes.js";
+
 
 const conexao = await conectaDatabase();
 conexao.on("error", (erro) => {
@@ -12,49 +15,31 @@ conexao.once("open",() => {
 
 const app = express();
 app.use(express.json());
+app.use(routes);
 
-const livros = [
-{
-    id : 1, 
-    titulo :"titulo um "
-},
-{
-    id : 2,
-    titulo : "titulo dois "
-}
-]
 
-function buscaLivro(id){
-     return livros.findIndex(livro => {
-        return livro.id === Number(id);
-     })
-}
-
-app.get("/", (req, res) =>{
+app.get("/", (req, res) => {
     res.status(200).send("livraria");
 });
 
-app.get("/livros", (req, res) =>{
-    res.status(200).json(livros);
-});
 
-app.get("/livros/:id", (req, res) =>{
+app.get("/livros/:id", (req, res) => {
     const index = buscaLivro(req.params.id);
     res.status(200).json(livros[index]);
 }); 
 
-app.post("/livros", (req, res) =>{
+app.post("/livros", (req, res) => {
     livros.push(req.body);
     res.status(201).send("livro criado");
 });
 
-app.put("/livros/:id",(req, res) =>{
+app.put("/livros/:id",(req, res) => {
     const index = buscaLivro(req.params.id);
     livros[index].titulo = req.body.titulo;
     res.status(200).json(livros)
 })
 
-app.delete("/livros/:id",(req, res) =>{
+app.delete("/livros/:id",(req, res) => {
     const index = buscaLivro(req.params.id);
     livros.splice(index, 1);
     res.status(200).send("livro deletado")
